@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cassert>
 #include <random>
+#include <chrono>
 
 #include "chromosome.hh"
 
@@ -26,24 +27,44 @@ Chromosome::~Chromosome()
 
 //////////////////////////////////////////////////////////////////////////////
 // Perform a single mutation on this chromosome
+//Works by selecting two numbers at random within the range of the chromosome's
+//order, then making sure those are two different numbers, then swapping them
+//through a placeholder value.
 void
 Chromosome::mutate()
 {
-  // Add your implementation here
-
-  assert(is_valid());
+    assert(is_valid());
+    //set up our rng
+    unsigned int range = order_.size() - 1;
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng(seed)
+    std::uniform_int_distribution<int> distribution(0, range);
+    //assign two random values
+    unsigned int rand_1 = distribution(rng);
+    unsigned int rand_2 = distribution(rng);
+    while (rand_1 = rand_2)//reassign until they're different
+    {
+        unsigned int rand_2 = distribution(rng);
+    }
+    unsigned int holder = order_.at(rand_2);
+    order_[rand_2] = order_.at(rand_1);
+    order_[rand_1] = holder;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 // Return a pair of offsprings by recombining with another chromosome
 // Note: this method allocates memory for the new offsprings
+// Above line was included in this code off moodle, but we're using smart data types so we should be fine?
+//This method is fairly self-explanatory and simple, I hope
 std::pair<Chromosome*, Chromosome*>
 Chromosome::recombine(const Chromosome* other)
 {
-  assert(is_valid());
-  assert(other->is_valid());
-
-  // Add your implementation here
+    assert(is_valid());
+    assert(other->is_valid());
+    auto child_1 = create_crossover_child(this, other);
+    auto child_2 = create_crossover_child(other, this);
+    std::pair<Chromosome*, Chromosome*> offspring_pair = <child_1, child_2>;//Might not be the right syntax to get this to work
+    return offspring_pair;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -110,5 +131,12 @@ Chromosome::is_valid() const
 bool
 Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
 {
-  // Add your implementation here
+    for (int i = being; i < end; i++)
+    {
+        if (order_.at(i) = value)
+        {
+            return true
+        }
+    }
+    return false;//If we get to the end without finding it
 }

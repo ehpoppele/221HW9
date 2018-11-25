@@ -41,7 +41,7 @@ Cities::permutation_t randomized_search(const Cities& cities, uint64_t niter)
   auto best_dist = 1e100;
 
   for (uint64_t i = 0; i < niter; ++i) {
-    auto ordering = random_permutation(cities.size());
+    auto ordering = cities.random_permutation(cities.size());
     if (is_improved(cities, ordering, best_dist, i)) {
       best_ordering = ordering;
     }
@@ -115,7 +115,10 @@ int main(int argc, char** argv)
     return -1;
   }
 
-  const auto cities = Cities(argv[1]);
+  std::ifstream fs(argv[1]);
+  Cities cities({});
+  fs >> cities;
+  fs.close();
   const auto pop_size = atoi(argv[2]);
   const auto mut_rate = atof(argv[3]);
   constexpr unsigned NUM_ITER = 100000;
@@ -130,9 +133,8 @@ int main(int argc, char** argv)
     std::cerr << "Can't open output file to record shortest path!\n";
     return -2;
   }
-
-  out << cities.reorder(best_ordering);
+  Cities best_ordered_city = cities.reorder(best_ordering);
+  out << best_ordered_city;
 
   return 0;
 }
-

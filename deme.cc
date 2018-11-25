@@ -10,7 +10,12 @@
 // Also receives a mutation rate in the range [0-1].
 Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate)
 {
-  // Add your implementation here
+    mut_rate_ = mut_rate;
+    pop_=std::vector<Chromosome*>();
+    for(unsigned i = 0; i < pop_size; i++ ){
+        Chromosome* new_chrom = new Chromosome(cities_ptr);
+        pop_.push_back(new_chrom);
+    }
 }
 
 // Clean up as necessary

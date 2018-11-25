@@ -73,7 +73,7 @@ int Cities::size() const {
 //while the stream is not done, make pairs of values
 //relies on in reading a whole number
 //as explained to me by robert
-std::istream& operator >> (std::istream& in, Cities& cities_ls){
+std::istream& operator>> (std::istream& in, Cities& cities_ls){
     int x;
     while(in >> x) {
         Cities::coord_t pair;
@@ -86,7 +86,7 @@ std::istream& operator >> (std::istream& in, Cities& cities_ls){
 
 //writes tab separated list
 //each pair in the elements is written on a newline as tab separated values
-std::ostream& operator << (std::ostream& os, Cities& cities_ls){
+std::ostream& operator<< (std::ostream& os, Cities& cities_ls){
     for(Cities::coord_t elm: cities_ls.city_elements_){
         os << elm.first << "\t" << elm.second << "\n";
     }
@@ -98,26 +98,3 @@ std::vector<Cities::coord_t> Cities::get_elements() const
 {
     return this->city_elements_;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

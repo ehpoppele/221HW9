@@ -13,7 +13,7 @@
 // Generate a completely random permutation from a list of cities
 Chromosome::Chromosome(const Cities* cities_ptr)
   : cities_ptr_(cities_ptr),
-    order_(random_permutation(cities_ptr->size()))
+    order_(cities_ptr -> random_permutation(cities_ptr->size()))
 {
   assert(is_valid());
 }
@@ -37,14 +37,14 @@ Chromosome::mutate()
     //set up our rng
     unsigned int range = order_.size() - 1;
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine rng(seed)
+    std::default_random_engine rng(seed);
     std::uniform_int_distribution<int> distribution(0, range);
     //assign two random values
     unsigned int rand_1 = distribution(rng);
     unsigned int rand_2 = distribution(rng);
-    while (rand_1 = rand_2)//reassign until they're different
+    while (rand_1 == rand_2)//reassign until they're different
     {
-        unsigned int rand_2 = distribution(rng);
+        rand_2 = distribution(rng);
     }
     unsigned int holder = order_.at(rand_2);
     order_[rand_2] = order_.at(rand_1);
@@ -61,9 +61,14 @@ Chromosome::recombine(const Chromosome* other)
 {
     assert(is_valid());
     assert(other->is_valid());
-    auto child_1 = create_crossover_child(this, other);
-    auto child_2 = create_crossover_child(other, this);
-    std::pair<Chromosome*, Chromosome*> offspring_pair = <child_1, child_2>;//Might not be the right syntax to get this to work
+    //`create_crossover_child` takes two ints also
+    auto child_1 = create_crossover_child(this, other, 0, 0);
+    auto child_2 = create_crossover_child(other, this, 0, 0);
+    // dunno what they do
+    // but this should help it compile
+
+    // std::pair<Chromosome*, Chromosome*> offspring_pair = <child_1, child_2>;//Might not be the right syntax to get this to work
+    std::pair<Chromosome*, Chromosome*> offspring_pair = std::make_pair(child_1, child_2);
     return offspring_pair;
 }
 
@@ -101,9 +106,10 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
 
 // Return a positive fitness value, with higher numbers representing
 // fitter solutions (shorter total-city traversal path).
-double
-Chromosome::get_fitness() const
+
+double Chromosome::get_fitness() const
 {
+
   // Add your implementation here
 }
 
@@ -128,14 +134,13 @@ Chromosome::is_valid() const
 // Find whether a certain value appears in a given range of the chromosome.
 // Returns true if value is within the specified the range specified
 // [begin, end) and false otherwise.
-bool
-Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
+bool Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
 {
-    for (int i = being; i < end; i++)
+    for (unsigned int i = begin; i < end; i++)
     {
-        if (order_.at(i) = value)
+        if (order_.at(i) == value)
         {
-            return true
+            return true;
         }
     }
     return false;//If we get to the end without finding it

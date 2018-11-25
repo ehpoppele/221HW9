@@ -44,8 +44,9 @@ void Deme::compute_next_generation()
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
     std::default_random_engine generator (seed);
-    std::vector<Chromosome*> new_pop({});
-    for(unsigned int i = 0; i < pop_.size() / 2; i++ ) {
+    unsigned int generation_size = pop_.size() / 2;
+    std::vector<Chromosome*> children_vec({});
+    for(unsigned int i = 0; i < generation_size; i++ ) {
     	auto father = select_parent();
     	double mut_roll = std::generate_canonical<double,std::numeric_limits<double>::digits>(generator);
         // mut_roll is a random in [0,1)
@@ -58,10 +59,10 @@ void Deme::compute_next_generation()
     	    mother -> mutate();
     	}
     	auto children = father -> recombine(mother);
-    	new_pop.push_back(children.first);
-    	new_pop.push_back(children.second);
+    	children_vec.push_back(children.first);
+    	children_vec.push_back(children.second);
     }
-    pop_ = new_pop;
+    pop_ = children_vec;
 }
 
 // Return a copy of the chromosome with the highest fitness.

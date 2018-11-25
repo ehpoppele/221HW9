@@ -15,9 +15,9 @@ Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate)
 {
     mut_rate_ = mut_rate;
     pop_=std::vector<Chromosome*>();
-    for(unsigned i = 0; i < pop_size; i++ ){
-        Chromosome* new_chrom = new Chromosome(cities_ptr);
-        pop_.push_back(new_chrom);
+    for(unsigned i = 0; i < pop_size; i++ ) {
+	Chromosome* new_chrom = new Chromosome(cities_ptr);
+	pop_.push_back(new_chrom);
     }
 }
 
@@ -29,7 +29,7 @@ Deme::~Deme()
     // mut_rate is a primitive, don't need to delete it
     // default_random_engine is a mystery.
 
-  // Add your implementation here
+    // Add your implementation here
 }
 
 // Evolve a single generation of new chromosomes, as follows:
@@ -41,18 +41,36 @@ Deme::~Deme()
 // After we've generated pop_size new chromosomes, we delete all the old ones.
 void Deme::compute_next_generation()
 {
-  // Add your implementation here
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+
+    std::default_random_engine generator (seed);
+    for(unsigned int i = 0; i < pop_.size() / 2; i++ ) {
+    	auto father = select_parent();
+    	double mut_roll = std::generate_canonical<double,std::numeric_limits<double>::digits>(generator);
+        // mut_roll is a random in [0,1)
+    	if(mut_roll < mut_rate_) {
+    	    father -> mutate();
+    	}
+    	auto mother = select_parent();
+    	mut_roll = std::generate_canonical<double,std::numeric_limits<double>::digits>(generator);
+    	if(mut_roll < mut_rate_) {
+    	    mother -> mutate();
+    	}
+    	auto children = father -> recombine(mother);
+    	pop_.push_back(children.first);
+    	pop_.push_back(children.second);
+    }
 }
 
 // Return a copy of the chromosome with the highest fitness.
 const Chromosome* Deme::get_best() const
 {
     return *std::max_element(pop_.begin(), pop_.end(),
-        [] (Chromosome* a, Chromosome* b)
-        {
-            return a -> get_fitness() > b -> get_fitness();
-        }
-    );
+            [] (Chromosome* a, Chromosome* b)
+    {
+	return a->get_fitness() > b->get_fitness();
+    }
+            );
 }
 
 // Randomly select a chromosome in the population based on fitness and
@@ -60,8 +78,8 @@ const Chromosome* Deme::get_best() const
 Chromosome* Deme::select_parent()
 {
     int s = 0;
-    for(auto f: pop_){
-        s += f -> get_fitness();
+    for(auto f: pop_) {
+	s += f->get_fitness();
     }
     // s is now the sum of fitness
 
@@ -71,10 +89,10 @@ Chromosome* Deme::select_parent()
     //generate a random value
     unsigned int p = distribution(rng);
     for(unsigned int i = 0; i < pop_.size(); i++) {
-        p = - pop_.at(i) -> get_fitness();
-        if(p < 0) {
-            return pop_.at(i);
-        }
+	p = -pop_.at(i)->get_fitness();
+	if(p < 0) {
+	    return pop_.at(i);
+	}
     }
     return pop_.at(pop_.size() - 1);
 }

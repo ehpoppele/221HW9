@@ -21,6 +21,11 @@ Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate)
 // Clean up as necessary
 Deme::~Deme()
 {
+    // deme member variables:
+    // pop_ is a smart vector, don't need to delete it
+    // mut_rate is a primitive, don't need to delete it
+    // default_random_engine is a mystery.
+
   // Add your implementation here
 }
 
@@ -46,5 +51,6 @@ const Chromosome* Deme::get_best() const
 // return a pointer to that chromosome.
 Chromosome* Deme::select_parent()
 {
+    
   // Add your implementation here
 }

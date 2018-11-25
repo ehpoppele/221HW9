@@ -23,7 +23,8 @@ Chromosome::Chromosome(const Cities* cities_ptr)
 // Clean up as necessary
 Chromosome::~Chromosome()
 {
-  assert(is_valid());
+    delete cities_ptr_;//Unsure if necessary
+    assert(is_valid());
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -55,7 +56,6 @@ Chromosome::mutate()
 //////////////////////////////////////////////////////////////////////////////
 // Return a pair of offsprings by recombining with another chromosome
 // Note: this method allocates memory for the new offsprings
-// Above line was included in this code off moodle, but we're using smart data types so we should be fine?
 //This method is fairly self-explanatory and simple, I hope
 std::pair<Chromosome*, Chromosome*>
 Chromosome::recombine(const Chromosome* other)
@@ -112,7 +112,7 @@ double Chromosome::get_fitness() const
 {
     double constant = 100;//Used for fit func, figure out most optimal constant later
     double dist = cities_ptr_->total_path_distance(order_);
-    double power = 2;//also fiddling with this
+    double power = 3;//also fiddling with this
     double fit = std::pow((constant/dist), power);
     return fit;
   // Add your implementation here

@@ -18,7 +18,7 @@ double Cities::dist_between(coord_t city_a, coord_t city_b) const
 //the permutation vector.
 Cities Cities::reorder(const permutation_t& ordering) const
 {
-    auto permuted_cities = new Cities();
+    Cities permuted_cities;
     std::vector<coord_t> permuted_elmts = {};//empty vector
     //Copy in the reordered elements
     for (int i : ordering)
@@ -30,8 +30,8 @@ Cities Cities::reorder(const permutation_t& ordering) const
     {
         permuted_elmts.push_back(this->city_elements_.at(i-1));//since i is a size here, we need to scale it back to refer to the elements
     }
-    permuted_cities->city_elements_ = permuted_elmts;
-    return *permuted_cities;
+    permuted_cities.city_elements_ = permuted_elmts;
+    return permuted_cities;
 }
 
 //Returns a random permutation of ints 0 to len-1
@@ -57,12 +57,14 @@ Cities::permutation_t Cities::random_permutation(unsigned len) const
 //Returns the total path distance for a given ordering of cities.
 double Cities::total_path_distance(const permutation_t& ordering) const
 {
+    //Cities* reordered_city = reorder(ordering);
     auto city_path = reorder(ordering).city_elements_;
     double distance = dist_between(city_path.at(0), city_path.at(city_path.size()-1));//Initialize distance as dist between first and last
     for (unsigned int i = 1; i < city_path.size(); i++)//loop the distance between city i and the city before it, from the second to the last city.
     {
         distance += dist_between(city_path.at(i), city_path.at(i-1));
     }
+    //delete reordered_city;
     return distance;
 }
 int Cities::size() const {

@@ -62,7 +62,9 @@ void Deme::compute_next_generation()
     	children_vec.push_back(children.first);
     	children_vec.push_back(children.second);
     }
+    //std::vector<Chromosome*>().swap(pop_);//Swap an empty vector into pop to clear it up
     pop_ = children_vec;
+    //std::vector<Chromosome*>().swap(children_vec);//Swap an empty vector into pop to clear it up
 }
 
 // Return a copy of the chromosome with the highest fitness.

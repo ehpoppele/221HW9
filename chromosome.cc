@@ -6,6 +6,7 @@
 #include <cassert>
 #include <random>
 #include <chrono>
+#include <cmath>
 
 #include "chromosome.hh"
 
@@ -106,10 +107,14 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
 
 // Return a positive fitness value, with higher numbers representing
 // fitter solutions (shorter total-city traversal path).
-
+//This is a very rough implementation; needs to be fixed
 double Chromosome::get_fitness() const
 {
-
+    double constant = 100;//Used for fit func, figure out most optimal constant later
+    double dist = cities_ptr_->total_path_distance(order_);
+    double power = 2;//also fiddling with this
+    double fit = std::pow((constant/dist), power);
+    return fit;
   // Add your implementation here
 }
 

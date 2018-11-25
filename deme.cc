@@ -90,7 +90,7 @@ Chromosome* Deme::select_parent()
     std::default_random_engine rng(seed);
     std::uniform_int_distribution<int> distribution(0, pop_.size());
     //generate a random value
-    unsigned int p = distribution(rng);
+    int p = distribution(rng);
     for(unsigned int i = 0; i < pop_.size(); i++) {
 	p = -pop_.at(i)->get_fitness();
 	if(p < 0) {

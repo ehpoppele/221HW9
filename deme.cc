@@ -6,6 +6,8 @@
 #include <cmath>
 #include "chromosome.hh"
 #include "deme.hh"
+#include <random>
+#include <chrono>
 
 // Generate a Deme of the specified size with all-random chromosomes.
 // Also receives a mutation rate in the range [0-1].
@@ -45,7 +47,7 @@ void Deme::compute_next_generation()
 // Return a copy of the chromosome with the highest fitness.
 const Chromosome* Deme::get_best() const
 {
-    std::max_element(pop_.begin(), pop_.end(),
+    return *std::max_element(pop_.begin(), pop_.end(),
         [] (Chromosome* a, Chromosome* b)
         {
             return a -> get_fitness() > b -> get_fitness();
@@ -57,7 +59,22 @@ const Chromosome* Deme::get_best() const
 // return a pointer to that chromosome.
 Chromosome* Deme::select_parent()
 {
+    int s = 0;
+    for(auto f: pop_){
+        s += f -> get_fitness();
+    }
+    // s is now the sum of fitness
 
-
-  // Add your implementation here
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng(seed);
+    std::uniform_int_distribution<int> distribution(0, pop_.size());
+    //generate a random value
+    unsigned int p = distribution(rng);
+    for(unsigned int i = 0; i < pop_.size(); i++) {
+        p = - pop_.at(i) -> get_fitness();
+        if(p < 0) {
+            return pop_.at(i);
+        }
+    }
+    return pop_.at(pop_.size() - 1);
 }

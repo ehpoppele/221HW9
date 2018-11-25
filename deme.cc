@@ -2,7 +2,8 @@
  * Declarations for Deme class to evolve a genetic algorithm for the
  * travelling-salesperson problem.  A deme is a population of individuals.
  */
-
+#include <algorithm>
+#include <cmath>
 #include "chromosome.hh"
 #include "deme.hh"
 
@@ -44,13 +45,19 @@ void Deme::compute_next_generation()
 // Return a copy of the chromosome with the highest fitness.
 const Chromosome* Deme::get_best() const
 {
-  // Add your implementation here
+    std::max_element(pop_.begin(), pop_.end(),
+        [] (Chromosome* a, Chromosome* b)
+        {
+            return a -> get_fitness() > b -> get_fitness();
+        }
+    );
 }
 
 // Randomly select a chromosome in the population based on fitness and
 // return a pointer to that chromosome.
 Chromosome* Deme::select_parent()
 {
-    
+
+
   // Add your implementation here
 }

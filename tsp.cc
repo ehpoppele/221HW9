@@ -121,7 +121,7 @@ int main(int argc, char** argv)
   fs.close();
   const auto pop_size = atoi(argv[2]);
   const auto mut_rate = atof(argv[3]);
-  constexpr unsigned NUM_ITER = 1;
+  constexpr unsigned NUM_ITER = 100000;
 
 
 //  const auto best_ordering = exhaustive_search(cities);

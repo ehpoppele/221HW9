@@ -24,8 +24,12 @@ Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate)
 // Clean up as necessary
 Deme::~Deme()
 {
+    //pop_ is a vector which should be a smart data type, but for some reason this is necessary
+    for (auto chrom : pop_)
+    {
+        delete chrom;
+    }
     // deme member variables:
-    // pop_ is a smart vector, don't need to delete it
     // mut_rate is a primitive, don't need to delete it
     // default_random_engine is a mystery.
 
@@ -62,9 +66,11 @@ void Deme::compute_next_generation()
     	children_vec.push_back(children.first);
     	children_vec.push_back(children.second);
     }
-    //std::vector<Chromosome*>().swap(pop_);//Swap an empty vector into pop to clear it up
+    for (auto chrom : pop_)
+    {
+        delete chrom;
+    }
     pop_ = children_vec;
-    //std::vector<Chromosome*>().swap(children_vec);//Swap an empty vector into pop to clear it up
 }
 
 // Return a copy of the chromosome with the highest fitness.

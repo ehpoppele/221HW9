@@ -23,7 +23,6 @@ Chromosome::Chromosome(const Cities* cities_ptr)
 // Clean up as necessary
 Chromosome::~Chromosome()
 {
-    delete cities_ptr_;//Unsure if necessary
     assert(is_valid());
 }
 
@@ -110,7 +109,7 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
 //This is a very rough implementation; needs to be fixed
 double Chromosome::get_fitness() const
 {
-    double constant = 100;//Used for fit func, figure out most optimal constant later
+    double constant = 1000;//Used for fit func, figure out most optimal constant later
     double dist = cities_ptr_->total_path_distance(order_);
     double power = 3;//also fiddling with this
     double fit = std::pow((constant/dist), power);

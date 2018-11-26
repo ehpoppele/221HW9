@@ -108,6 +108,37 @@ Cities::permutation_t ga_search(const Cities& cities,
 
 
 //////////////////////////////////////////////////////////////////////////////
+
+
+auto randomized_search(Cities city, unsigned int NUM_ITER) {
+        const int number_of_cities = city.size();
+
+        Cities best_city({});
+        double best_distance = std::numeric_limits<double>::infinity();
+        Cities::permutation_t order = city.random_permutation(number_of_cities);
+        Cities::permutation_t best_ordering = order;
+        // In each iteration,
+        for(unsigned int i = 0; i < NUM_ITER; i++) {
+        //     it generates a new random permutation;
+            order = city.random_permutation(number_of_cities);
+            city = city.reorder(order);
+            //     evaluates the distance to travel the cities along this ordering;
+            double dist = city.total_path_distance(order);
+            //     compares it to the best (shortest) distance found so far,
+            //     and if it's shorter,
+            if(dist < best_distance) {
+            //         replaces the cities object with the newly-reordered cities and
+            //         prints out to the screen the iteration number,
+            //         followed by a space (or tab) and the total distance of the new path.
+                best_distance = dist;
+                best_ordering = order;
+                best_city = city;
+                std::cout << i << "\t" << best_distance << "\n";
+            }
+        }
+        return best_ordering;
+}
+
 int main(int argc, char** argv)
 {
   if (argc != 4) {
@@ -125,8 +156,8 @@ int main(int argc, char** argv)
 
 
 //  const auto best_ordering = exhaustive_search(cities);
-//  const auto best_ordering = randomized_search(cities, NUM_ITER);
-  const auto best_ordering = ga_search(cities, NUM_ITER, pop_size, mut_rate);
+// const auto best_ordering = ga_search(cities, NUM_ITER, pop_size, mut_rate);
+ const auto best_ordering = randomized_search(cities, NUM_ITER);
 
   auto out = std::ofstream("shortest.tsv");
   if (!out.is_open()) {

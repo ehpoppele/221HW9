@@ -1,6 +1,6 @@
 # 221HW9
 Partners: Eli Poppele and Jon Takagi
-Important Note!
+## Important Note!
 The file tsp.cc is currently set to do a randomized search.
 You will need to comment out line 160 and uncomment line 159.
 (I didn't realize this until after submitting the assignment, and wanted to leave the files as they are, so it's clear they've remained in the state we submitted them in.)
